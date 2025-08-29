@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "0.1",
+	"VersionName": "1.0",
 	"FriendlyName": "ScreenRecording",
 	"Description": "ScreenRecording For UE4.27",
 	"Category": "ScreenRecording",
@@ -19,7 +19,7 @@
 			"Name": "ScreenRecording",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
-			"WhitelistPlatforms": [ "Win64" ]
+			"WhitelistPlatforms": [ "Win64", "Linux" ]
 		}
 	]
 }

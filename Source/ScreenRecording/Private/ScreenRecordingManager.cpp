@@ -43,6 +43,11 @@ void AScreenRecordingManager::Tick(float DeltaTime)
 
 void AScreenRecordingManager::Initialize()
 {
+	if (AsyncLock)
+	{
+		return;
+	}
+
 	TWeakObjectPtr<AScreenRecordingManager> WeakThis(this);
 
 	AsyncTask(ENamedThreads::AnyThread, [WeakThis]()
@@ -50,6 +55,7 @@ void AScreenRecordingManager::Initialize()
 			// 检查 Actor 是否仍然有效
 			if (WeakThis.IsValid())
 			{
+				WeakThis->AsyncLock = true;
 				WeakThis->PerformAsyncInitialization();
 			}
 			else
@@ -64,6 +70,8 @@ void AScreenRecordingManager::OnAsyncInitCompleted(bool bSuccess)
 	bIsInitialize = bSuccess;
 
 	OnInitCompleted.Broadcast(bSuccess);
+
+	AsyncLock = false;
 }
 
 void AScreenRecordingManager::PerformAsyncInitialization()

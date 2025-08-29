@@ -68,4 +68,5 @@ public:
 
 	bool bIsRecording;
 	bool bIsInitialize;
+	bool AsyncLock;
 };

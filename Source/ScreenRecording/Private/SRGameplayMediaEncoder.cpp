@@ -344,7 +344,7 @@ void FSRGameplayMediaEncoder::Stop()
 			AudioDevice->UnregisterSubmixBufferListener(this);
 		}
 	}
-	else
+	else if(GEngine)
 	{
 		FAudioDeviceHandle AudioDevice = GEngine->GetMainAudioDevice();
 		if (AudioDevice)
