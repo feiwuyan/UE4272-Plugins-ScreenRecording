@@ -1,0 +1,25 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1",
+	"FriendlyName": "ScreenRecording",
+	"Description": "ScreenRecording For UE4.27",
+	"Category": "ScreenRecording",
+	"CreatedBy": "M1grate",
+	"CreatedByURL": "https://blog.csdn.net/Fei_WuYan",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ScreenRecording",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"WhitelistPlatforms": [ "Win64" ]
+		}
+	]
+}
