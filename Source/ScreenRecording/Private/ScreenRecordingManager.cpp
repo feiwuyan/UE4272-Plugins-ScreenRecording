@@ -41,7 +41,7 @@ void AScreenRecordingManager::Tick(float DeltaTime)
 
 }
 
-void AScreenRecordingManager::Initialize()
+void AScreenRecordingManager::Initialize(FString FilePath)
 {
 	if (AsyncLock)
 	{
@@ -50,13 +50,13 @@ void AScreenRecordingManager::Initialize()
 
 	TWeakObjectPtr<AScreenRecordingManager> WeakThis(this);
 
-	AsyncTask(ENamedThreads::AnyThread, [WeakThis]()
+	AsyncTask(ENamedThreads::AnyThread, [WeakThis, FilePath]()
 		{
 			// 检查 Actor 是否仍然有效
 			if (WeakThis.IsValid())
 			{
 				WeakThis->AsyncLock = true;
-				WeakThis->PerformAsyncInitialization();
+				WeakThis->PerformAsyncInitialization(FilePath);
 			}
 			else
 			{
@@ -74,10 +74,30 @@ void AScreenRecordingManager::OnAsyncInitCompleted(bool bSuccess)
 	AsyncLock = false;
 }
 
-void AScreenRecordingManager::PerformAsyncInitialization()
+void AScreenRecordingManager::PerformAsyncInitialization(FString FilePath)
 {
 	TWeakObjectPtr<AScreenRecordingManager> WeakThis(this);
 	bool bSuccess = bIsInitialize;
+
+	FString DirectoryPath = FPaths::GetPath(FilePath);
+	IFileManager& FileManager = IFileManager::Get();
+	if((!DirectoryPath.IsEmpty()) && (FileManager.DirectoryExists(*DirectoryPath)))
+	{
+		UE_LOG(LogTemp, Log, TEXT("目录 '%s' 已存在，可以创建文件."), *DirectoryPath);
+	}
+	else
+	{
+		bSuccess = false;
+		AsyncTask(ENamedThreads::GameThread, [WeakThis, bSuccess]()
+			{
+				if (WeakThis.IsValid())
+				{
+					WeakThis->OnAsyncInitCompleted(bSuccess);
+				}
+			});
+		return;
+	}
+
 	if (bIsInitialize)
 	{
 		AsyncTask(ENamedThreads::GameThread, [WeakThis, bSuccess]()
@@ -92,7 +112,7 @@ void AScreenRecordingManager::PerformAsyncInitialization()
 
 	bIsInitialize = GME->Initialize();
 
-	FString FilePath = FPaths::ProjectSavedDir() / "CapturedVideo.mp4";
+	//FString FilePath = FPaths::ProjectSavedDir() / "CapturedVideo.mp4";
 
 	AVEncoder::FAudioConfig AudioConfig;
 	AudioConfig.Codec = "aac";

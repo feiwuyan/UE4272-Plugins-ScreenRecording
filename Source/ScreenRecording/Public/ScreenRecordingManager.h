@@ -44,7 +44,7 @@ public:
 	void OnMediaSample(const AVEncoder::FMediaPacket& Sample);
 
 	// 实际执行初始化逻辑的函数，将在后台线程中调用
-	void PerformAsyncInitialization();
+	void PerformAsyncInitialization(FString FilePath);
 
 	// 蓝图可绑定的委托，用于在异步初始化完成后通知蓝图
 	UPROPERTY(BlueprintAssignable)
@@ -54,7 +54,7 @@ public:
     void OnAsyncInitCompleted(bool bSuccess);
 
 	UFUNCTION(BlueprintCallable)
-	void Initialize();
+	void Initialize(FString FilePath);
 	UFUNCTION(BlueprintCallable)
 	bool Start();
 	UFUNCTION(BlueprintCallable)
